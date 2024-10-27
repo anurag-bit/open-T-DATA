@@ -11,11 +11,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Load environment variables from .env file
 # so that we can access the OpenAI API key
-load_dotenv()
 
-# Get the OpenAI API key from environment variables
-api_key = os.getenv('OPENAI_API_KEY')
-client = OpenAI(api_key=api_key)
 
 
 def print_ascii_header():

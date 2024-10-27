@@ -1,0 +1,26 @@
+[package]
+name = "open-tdata_setup"
+version = "0.1.0"
+edition = "2021"
+authors = ["AnuragKumarSingh singh.ask@outlook.com"]
+description = "A cross-platform setup script for open-T-data"
+license = "MIT"
+
+[dependencies]
+# If you need any external crates, add them here
+# For example:
+# reqwest = { version = "0.11", features = ["blocking"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = 'abort'
+strip = true
+
+[[bin]]
+name = "open-tdata_setup"
+path = "src/main.rs"
+[target.x86_64-pc-windows-gnu]
+linker = "x86_64-w64-mingw32-gcc"
+ar = "x86_64-w64-mingw32-gcc-ar"

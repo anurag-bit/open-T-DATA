@@ -1,0 +1,56 @@
+```json
+{
+    "context": {
+        "device_name": "ADXL313",
+        "description": "The ADXL313 is a small, thin, low power, 3-axis accelerometer with high resolution (13-bit) measurement up to ±4g. It features built-in motion detection functions for activity and inactivity monitoring, multiple power management options, SPI and I2C digital interfaces, and operates within a voltage range of 2.0V to 3.6V. It is capable of surviving a 10,000g shock and is qualified for automotive applications. Refer to the datasheet for detailed specifications, functional block diagrams, and register map."
+    },
+    "functions": [
+        {
+            "function_name": "adxl313_initialize",
+            "code": "static int adxl313_initialize(struct device *dev, struct regmap *regmap)",
+            "purpose": "This function initializes the ADXL313 sensor, setting up the SPI configuration and ensuring the device is ready for operation."
+        },
+        {
+            "function_name": "adxl313_power_on",
+            "code": "static int adxl313_power_on(struct regmap *regmap)",
+            "purpose": "This function powers on the ADXL313 sensor and sets it to measurement mode."
+        },
+        {
+            "function_name": "adxl313_power_off",
+            "code": "static int adxl313_power_off(struct regmap *regmap)",
+            "purpose": "This function powers off the ADXL313 sensor and sets it to standby mode to minimize power consumption."
+        },
+        {
+            "function_name": "adxl313_set_data_rate",
+            "code": "static int adxl313_set_data_rate(struct regmap *regmap, uint8_t rate)",
+            "purpose": "This function sets the output data rate of the ADXL313 sensor."
+        },
+        {
+            "function_name": "adxl313_set_range",
+            "code": "static int adxl313_set_range(struct regmap *regmap, uint8_t range)",
+            "purpose": "This function sets the measurement range of the ADXL313 sensor."
+        },
+        {
+            "function_name": "adxl313_read_data",
+            "code": "static int adxl313_read_data(struct regmap *regmap, int16_t *x, int16_t *y, int16_t *z)",
+            "purpose": "This function reads the X, Y, and Z axis data from the ADXL313 sensor."
+        },
+        {
+            "function_name": "adxl313_set_interrupt_mapping",
+            "code": "static int adxl313_set_interrupt_mapping(struct regmap *regmap, uint8_t interrupt_map)",
+            "purpose": "This function sets the mapping of interrupts to the INT1 and INT2 pins of the ADXL313 sensor."
+        },
+        {
+            "function_name": "adxl313_configure_fifo",
+            "code": "static int adxl313_configure_fifo(struct regmap *regmap, uint8_t fifo_mode, uint8_t samples)",
+            "purpose": "This function configures the FIFO settings of the ADXL313 sensor, including FIFO mode and sample threshold."
+        },
+        {
+            "function_name": "adxl313_self_test",
+            "code": "static int adxl313_self_test(struct regmap *regmap)",
+            "purpose": "This function performs a self-test of the ADXL313 sensor to verify its proper operation."
+        }
+    ]
+}
+```
+This JSON structure provides a concise and organized summary of the essential functions needed for interfacing with the ADXL313 sensor based on the provided datasheet.

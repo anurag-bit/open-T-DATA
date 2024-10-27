@@ -1,0 +1,194 @@
+```json
+{
+    "message": [
+        {
+            "role": "user",
+            "content": "AIS328DQ 3D Accelerometer\n\nDevice Type: 3-axis MEMS Accelerometer\n\nKey Features:\n- Wide supply voltage range: 2.4 V to 3.6 V\n- Supports both high-performance and low-power modes\n- 8-bit data output with multiple full-scale ranges (±2g, ±4g, ±8g)\n- SPI and I²C digital interfaces\n- Auto-Wake/Sleep functionality with configurable idle times\n- Built-in motion detection\n- Operating temperature range: -40 °C to +105 °C\n\nCommunication Interface:\n- I²C and SPI (3/4-wire) digital interfaces\n\nRegister Addresses and Descriptions:\n- 0Fh WHO_AM_I: Device Identification Register, default 32h\n- 20h CTRL_REG1: Control Register 1 for setting the data rate and enabling axes\n- 21h CTRL_REG2: Control Register 2 for High Pass Filter settings\n- 22h CTRL_REG3: Control Register 3 for interrupt control\n- 23h CTRL_REG4: Control Register 4 for self test, endian selection, and full scale selection\n- 24h CTRL_REG5: Control Register 5 for reboot memory\n- 30h INT_CFG1: Interrupt 1 Configuration Register\n- 31h INT_SRC1: Interrupt 1 Source Register\n- 32h INT_THS1: Interrupt 1 Threshold Register\n- 33h INT_DUR1: Interrupt 1 Duration Register\n- 34h INT_CFG2: Interrupt 2 Configuration Register\n- 35h INT_SRC2: Interrupt 2 Source Register\n- 36h INT_THS2: Interrupt 2 Threshold Register\n- 37h INT_DUR2: Interrupt 2 Duration Register\n\nPackages:\n- 10-terminal LGA with dimensions 3 x 3 mm\n\nOperating Modes and Configuration:\n- Can be configured for simple motion detection without a host processor.\n- Auto-wake/sleep feature switches between active and low-power modes based on motion detection.\n- Flexible performance mode supports custom output data rates.\n- The device includes an embedded self-test function to check functionality without external equipment. The trimming values are stored inside the device in non-volatile memory. When the device is turned on, the trimming parameters are downloaded into the registers to be used during active operation, thus eliminating the need for further calibration. The AIS328DQ may be set to a low-power operating mode, characterized by lower data rate refreshes, even if sleeping, continuous acceleration sensing, generating interrupts upon detecting motion.\n"
+        },
+        {
+            "role": "assistant",
+            "content": {
+                "text": "The driver code will contain all these parts in order -",
+                "order": [
+                    {
+                        "function_name": "static int ais328dq_acc_hw_init(struct ais328dq_acc_data *acc)",
+                        "purpose": "This function initializes the hardware configuration of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static void ais328dq_acc_device_power_off(struct ais328dq_acc_data *acc)",
+                        "purpose": "This function powers off the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static int ais328dq_acc_device_power_on(struct ais328dq_acc_data *acc)",
+                        "purpose": "This function powers on the AIS328DQ sensor and initializes hardware if not already done"
+                    },
+                    {
+                        "function_name": "static irqreturn_t ais328dq_acc_isr1(int irq, void *dev)",
+                        "purpose": "This function handles interrupt service routine for Interrupt 1"
+                    },
+                    {
+                        "function_name": "static irqreturn_t ais328dq_acc_isr2(int irq, void *dev)",
+                        "purpose": "This function handles interrupt service routine for Interrupt 2"
+                    },
+                    {
+                        "function_name": "static void ais328dq_acc_irq1_work_func(struct work_struct *work)",
+                        "purpose": "Work function associated with Interrupt 1 ISR"
+                    },
+                    {
+                        "function_name": "static void ais328dq_acc_irq2_work_func(struct work_struct *work)",
+                        "purpose": "Work function associated with Interrupt 2 ISR"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_update_g_range(struct ais328dq_acc_data *acc, u8 range)",
+                        "purpose": "This function updates the g-range configuration of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_update_odr(struct ais328dq_acc_data *acc, int poll_interval_ms)",
+                        "purpose": "This function updates the output data rate of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_register_update(struct ais328dq_acc_data *acc, u8 *buf, u8 reg_address, u8 mask, u8 new_bit_values)",
+                        "purpose": "This function updates a specific register of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_selftest(struct ais328dq_acc_data *acc, u8 enable)",
+                        "purpose": "This function performs a self-test on the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_get_acceleration_data(struct ais328dq_acc_data *acc, int *xyz)",
+                        "purpose": "This function retrieves the acceleration data from the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_enable(struct ais328dq_acc_data *acc)",
+                        "purpose": "This function enables the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_disable(struct ais328dq_acc_data *acc)",
+                        "purpose": "This function disables the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t read_single_reg(struct device *dev, char *buf, u8 reg)",
+                        "purpose": "This function reads data from a single register of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static int write_reg(struct device *dev, const char *buf, u8 reg)",
+                        "purpose": "This function writes data to a single register of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_polling_rate(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the current polling rate of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_polling_rate(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the polling rate of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_range(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the current g-range setting of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_range(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the g-range of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_enable(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the enable status of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_enable(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the enable status of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_selftest(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the self-test status of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_selftest(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the self-test status of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_intconfig1(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the configuration for Interrupt 1 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_intconfig1(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the configuration for Interrupt 1 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_duration1(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the duration for Interrupt 1 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_duration1(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the duration for Interrupt 1 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_thresh1(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the threshold for Interrupt 1 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_thresh1(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the threshold for Interrupt 1 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_source1(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the source of Interrupt 1 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_intconfig2(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the configuration for Interrupt 2 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_intconfig2(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the configuration for Interrupt 2 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_duration2(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the duration for Interrupt 2 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_duration2(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the duration for Interrupt 2 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_set_thresh2(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)",
+                        "purpose": "This function sets the threshold for Interrupt 2 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_thresh2(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the threshold for Interrupt 2 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static ssize_t attr_get_source2(struct device *dev, struct device_attribute *attr, char *buf)",
+                        "purpose": "This function gets the source of Interrupt 2 of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static enum hrtimer_restart ais328dq_timer_poll(struct hrtimer *timer)",
+                        "purpose": "Timer poll function for periodic data reading using high-resolution timer"
+                    },
+                    {
+                        "function_name": "static void ais328dq_poll_work_func(struct work_struct *work)",
+                        "purpose": "Work function for handling periodic data retrieval and processing"
+                    },
+                    {
+                        "function_name": "static int ais328dq_acc_input_init(struct ais328dq_acc_data *acc)",
+                        "purpose": "Initializes input device structures and work queues for the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "static void ais328dq_acc_input_cleanup(struct ais328dq_acc_data *acc)",
+                        "purpose": "Cleans up the input device structures and work queues of the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_probe(struct ais328dq_acc_data *acc)",
+                        "purpose": "Core probe function for initializing and configuring the AIS328DQ sensor"
+                    },
+                    {
+                        "function_name": "int ais328dq_acc_remove(struct ais328dq_acc_data *acc)",
+                        "purpose": "Removes the AIS328DQ sensor and cleans up resources"
+                    }
+                ]
+            }
+        }
+    ]
+}
+```
